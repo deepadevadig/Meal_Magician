@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Magician</title>
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --text-color: #2d3436;
+            --light-bg: #f9f9f9;
+            --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), #ff9e7d);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+        }
+        
+        .tagline {
+            font-style: italic;
+            margin-top: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .search-form {
+            background-color: white;
+            max-width: 700px;
+            margin: -30px auto 40px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-color);
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
+        }
+        
+        .recipes-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 20px 0;
+        }
+        
+        .recipe {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s;
+        }
+        
+        .recipe:hover {
+            transform: translateY(-5px);
+        }
+        
+        .recipe-image {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+        }
+        
+        .recipe img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .recipe:hover img {
+            transform: scale(1.05);
+        }
+        
+        .recipe-content {
+            padding: 20px;
+        }
+        
+        .recipe h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+            color: var(--primary-color);
+        }
+        
+        .recipe-details h4 {
+            color: var(--text-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 8px;
+            margin: 20px 0 15px;
+        }
+        
+        .recipe ul {
+            padding-left: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .recipe li {
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .recipe li::before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        
+        .video-container {
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        video, iframe {
+            width: 100%;
+            height: 225px;
+            border: none;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .recipes-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-form {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Meal Magician</h1>
+            <p class="tagline">Transform your ingredients into delicious recipes!</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <form class="search-form" method="POST">
+            <label for="ingredients">What ingredients do you have?</label>
+            <div class="form-group">
+                <input type="text" id="ingredients" name="ingredients" placeholder="Enter ingredients (comma-separated)" required>
+            </div>
+            <button type="submit">Find Recipes</button>
+        </form>
+        
+        {% if recommendations %}
+            <h2>Recommended Recipes</h2>
+            <div class="recipes-container">
+                {% for recipe in recommendations %}
+                    <div class="recipe">
+                        <div class="recipe-image">
+                            <img src="{{ recipe.thumbnail_url }}" alt="{{ recipe.name }}" onerror="this.src='static/default_thumbnail.jpg'">
+                        </div>
+                        <div class="recipe-content">
+                            <h3>{{ recipe.name }}</h3>
+                            
+                            <div class="recipe-details">
+                                <h4>Instructions</h4>
+                                <ul>
+                                    {% for step in recipe.instructions %}
+                                        <li>{{ step }}</li>
+                                    {% endfor %}
+                                </ul>
+                                
+                                {% if recipe.embed_url %}
+                                    <h4>Watch How to Make It</h4>
+                                    <div class="video-container">
+                                        {% if recipe.video_type == "youtube" %}
+                                            <iframe src="{{ recipe.embed_url }}" allowfullscreen></iframe>
+                                        {% elif recipe.video_type == "mp4" or recipe.video_type == "tasty" %}
+                                            <video controls>
+                                                <source src="{{ recipe.embed_url }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        {% else %}
+                                            <p>Invalid video format.</p>
+                                        {% endif %}
+                                    </div>
+                                {% else %}
+                                    <p class="no-video">No video tutorial available.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Meal Magician - Find the perfect recipe for any ingredients!</p>
+        </div>
+    </footer>
+</body>
+</html>
